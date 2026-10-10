@@ -13,30 +13,6 @@
   .edit { cursor: text; border-radius: 4px; transition: box-shadow 0.12s ease, background 0.12s ease; }
   .edit:hover { box-shadow: 0 0 0 2px rgba(28,126,140,0.55); }
   .edit:focus { outline: none; box-shadow: 0 0 0 3px rgba(28,126,140,0.7); background: rgba(255,255,255,0.12); }
-  .editbar {
-    position: fixed;
-    top: 14px; right: 14px;
-    z-index: 100;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background: #fff;
-    border-radius: 999px;
-    box-shadow: 0 10px 30px rgba(13,43,69,0.25);
-    padding: 8px 10px 8px 18px;
-  }
-  .editbar strong { font-size: 0.85rem; color: #0d2b45; }
-  .editbar button {
-    border: 0;
-    cursor: pointer;
-    font: 600 0.9rem Inter, sans-serif;
-    padding: 10px 20px;
-    border-radius: 999px;
-    background: #1c7e8c;
-    color: #fff;
-    transition: transform 0.15s ease, background 0.15s ease;
-  }
-  .editbar button:hover { background: #15626e; transform: translateY(-1px); }
   .toast {
     position: fixed;
     bottom: 22px; left: 50%;
@@ -54,14 +30,6 @@
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
   .toast a { color: #8fd7e1; text-decoration: underline; }
-  .editbar .lock {
-    background: none;
-    color: #0d2b45;
-    border: 1px solid #e2e9ee;
-  }
-  .editbar .lock:hover { background: #f4f8fa; }
-  .editbar { display: none; }
-  .editbar.show { display: flex; }
   .auth-overlay {
     position: fixed;
     inset: 0;
@@ -137,11 +105,6 @@
   </div>
 </div>
 
-<div class="editbar">
-  <strong>Bewerkmodus</strong>
-  <button type="button" id="saveBtn">Download bestand</button>
-  <button type="button" class="lock" id="lockBtn" title="Uitloggen">Slot</button>
-</div>
 <div class="toast" id="toast"></div>
 
 <header class="site-header" id="header">
@@ -260,7 +223,6 @@
   var PASSWORD = "githubwaypoint";
   var STORAGE_KEY = "wp_admin_auth";
   var overlay = document.getElementById("authOverlay");
-  var editbar = document.querySelector(".editbar");
   var authForm = document.getElementById("authForm");
   var authPassword = document.getElementById("authPassword");
   var authError = document.getElementById("authError");
@@ -272,7 +234,6 @@
   function unlock() {
     try { localStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
     overlay.classList.add("hidden");
-    editbar.classList.add("show");
     authPassword.value = "";
   }
 
@@ -290,11 +251,6 @@
       authPassword.value = "";
       authPassword.focus();
     }
-  });
-
-  document.getElementById("lockBtn").addEventListener("click", function () {
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    location.reload();
   });
 
   if (typeof WAYPOINT_CONTENT === "undefined" || !C) {
@@ -595,7 +551,6 @@
     showToast("Bestand is gedownload. Nu op GitHub vervangen: <strong>Admin Website.js</strong> openen &rarr; penseel-icoon &rarr; alles vervangen &rarr; Commit changes. <a href='https://github.com/Taco481/Waypoint/blob/main/Admin%20Website.js' target='_blank'>Ga naar bestand</a>");
   }
 
-  $("#saveBtn").addEventListener("click", save);
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === "s") {
       e.preventDefault();
