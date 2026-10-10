@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beheer | Waypoint</title>
+<style>
+:root {
+  --navy: #0d2b45;
+  --teal: #1c7e8c;
+  --text: #26333f;
+  --muted: #5b7183;
+  --line: #e2e9ee;
+  --bg: #f4f8fa;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+.topbar {
+  background: var(--navy);
+  color: #fff;
+  padding: 26px 24px;
+}
+.topbar h1 { margin: 0 0 8px; font-size: 1.5rem; }
+.topbar p { margin: 0; color: rgba(255,255,255,0.85); max-width: 900px; }
+.topbar code { background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 4px; }
+main { max-width: 980px; margin: 0 auto; padding: 24px; }
+form { display: flex; flex-direction: column; gap: 18px; }
+fieldset {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  padding: 16px 18px 18px;
+  box-shadow: 0 2px 10px rgba(13,43,69,0.06);
+}
+legend { font-weight: 600; color: var(--navy); padding: 0 6px; }
+.group { border-left: 3px solid var(--teal); padding: 4px 12px 12px; margin: 8px 0 0 8px; }
+.group-title { font-size: 0.85rem; color: var(--muted); margin: 8px 0 4px; }
+.field { display: flex; flex-direction: column; gap: 5px; margin-top: 12px; }
+label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.02em; }
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+  resize: vertical;
+}
+textarea:focus { outline: 2px solid rgba(28,126,140,0.4); border-color: var(--teal); }
+.bar {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid var(--line);
+  padding: 14px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+}
+.bar button, .bar a.btn {
+  border: 0;
+  cursor: pointer;
+  font: 600 0.95rem "Segoe UI", Inter, sans-serif;
+  padding: 13px 30px;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-primary { background: var(--teal); color: #fff; box-shadow: 0 8px 20px rgba(28,126,140,0.35); }
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-link { background: transparent; color: var(--navy); border: 1px solid var(--line); }
+.btn-link:hover { border-color: var(--teal); }
+.note { color: var(--muted); font-size: 0.85rem; }
+.alert {
+  background: #fff3cd;
+  border: 1px solid #ffe08a;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 16px 0;
+}
+.ok {
+  background: #d4edda;
+  border-color: #b7e0bf;
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <h1>Waypoint — Beheer website</h1>
+  <p>Bewerk de teksten hieronder. Klik daarna op <strong>Download Admin Website.js</strong>, ga naar
+  <code>github.com/Taco481/Waypoint</code> &rarr; open het bestand &ldquo;Admin Website.js&rdquo; &rarr;
+  klik op het <strong>penseel-icoontje</strong> &rarr; vervang alle tekst door de nieuwe inhoud &rarr; onderaan
+  &ldquo;Commit changes&rdquo;. Binnen een minuut staat de site bijgewerkt online.</p>
+</header>
+
+<main>
+  <div class="alert" id="status" hidden></div>
+  <form id="form"></form>
+</main>
+
+<div class="bar">
+  <button type="submit" class="btn-primary" form="form" id="downloadBtn">Download Admin Website.js</button>
+  <a href="../Admin%20Website.js" target="_blank" class="btn btn-link">Bekijk Admin Website.js (leesbaar)</a>
+  <a href="../" target="_blank" class="btn btn-link">Bekijk de website</a>
+</div>
+
+<script src="../Admin%20Website.js"></script>
+<script>
+(function () {
+  var C = (typeof WAYPOINT_CONTENT !== "undefined") ? WAYPOINT_CONTENT : null;
+  var status = document.getElementById("status");
+
+  if (!C) {
+    status.hidden = false;
+    status.classList.remove("ok");
+    status.textContent = "Kon de huidige inhoud niet laden. Open deze pagina via het Waypoint-domein en ververs de pagina.";
+    status.style.display = "block";
+    return;
+  }
+
+  var LABELS = {
+    name: "Naam",
+    subtitle: "Ondertitel",
+    label: "Label",
+    href: "Link naar",
+    eyebrow: "Bovenkopje",
+    title: "Titel",
+    lead: "Intro alinea",
+    paragraph1: "Alinea 1",
+    paragraph2: "Alinea 2",
+    cardQuote: "Citaat in kaart",
+    cardSub: "Onderschrift kaart",
+    sub: "Overschrift",
+    text: "Tekst",
+    paragraphs: "Tekstblokken",
+    highlight: "Uitgelicht (optioneel)",
+    icon: "Icoon (niet wijzigen)",
+    links: "Menu onderdelen",
+    contact: "Contact menu",
+    steps: "Stappen",
+    features: "Redenen",
+    cards: "Kaarten (dienstverlening)",
+    imageCaption: "Bijschrift foto",
+    email: "E-mailadres",
+    emailLabel: "E-mail tekst op knop",
+    phone: "Telefoonnummer",
+    phoneLabel: "Telefoon tekst op knop",
+    copy: "Tekst in voettekst",
+    header: "Kop (header)",
+    nav: "Menu",
+    hero: "Eerste scherm",
+    intro: "Inleiding",
+    diensten: "Onze dienstverlening",
+    werkwijze: "Onze werkwijze",
+    waarom: "Waarom Waypoint",
+    over: "Over ons",
+    contactBlock: "Contact",
+    footer: "Voettekst"
+  };
+
+  function humanize(path) {
+    var keys = path.split(".");
+    var key = keys[keys.length - 1];
+    if (LABELS[key]) return LABELS[key];
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
+  function addInput(parent, path, value) {
+    var wrap = document.createElement("div");
+    wrap.className = "field";
+
+    var label = document.createElement("label");
+    label.textContent = humanize(path);
+
+    var ta = document.createElement("textarea");
+    ta.rows = Math.max(2, Math.min(8, Math.ceil(String(value).length / 90)));
+    ta.value = value === null || typeof value === "undefined" ? "" : String(value);
+    ta.dataset.path = path;
+
+    if (/\.icon$/.test(path)) ta.disabled = true;
+
+    wrap.appendChild(label);
+    wrap.appendChild(ta);
+    parent.appendChild(wrap);
+  }
+
+  function build(parent, obj, prefix) {
+    Object.keys(obj).forEach(function (key) {
+      var path = prefix ? prefix + "." + key : key;
+      var val = obj[key];
+
+      if (typeof val === "string") {
+        addInput(parent, path, val);
+      } else if (Array.isArray(val)) {
+        var fs = document.createElement("fieldset");
+        var legend = document.createElement("legend");
+        legend.textContent = humanize(path);
+        fs.appendChild(legend);
+
+        val.forEach(function (item, i) {
+          if (item && typeof item === "object") {
+            var sub = document.createElement("div");
+            sub.className = "group";
+            var gTitle = document.createElement("div");
+            gTitle.className = "group-title";
+            gTitle.textContent = (i + 1) + ". " + humanize(path);
+            sub.appendChild(gTitle);
+            build(sub, item, path + "." + i);
+            fs.appendChild(sub);
+          } else {
+            addInput(fs, path + "." + i, item);
+          }
+        });
+
+        parent.appendChild(fs);
+      } else if (val && typeof val === "object") {
+        var fs = document.createElement("fieldset");
+        var legend = document.createElement("legend");
+        legend.textContent = humanize(path);
+        fs.appendChild(legend);
+        build(fs, val, path);
+        parent.appendChild(fs);
+      }
+    });
+  }
+
+  build(document.getElementById("form"), C, "");
+
+  document.getElementById("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var out = {};
+    document.querySelectorAll("#form textarea").forEach(function (ta) {
+      var parts = ta.dataset.path.split(".");
+      var cur = out;
+      for (var i = 0; i < parts.length - 1; i++) {
+        var next = parts[i + 1];
+        var isIndex = /^\d+$/.test(next);
+        if (typeof cur[parts[i]] === "undefined") cur[parts[i]] = isIndex ? [] : {};
+        cur = cur[parts[i]];
+      }
+      cur[parts[parts.length - 1]] = ta.value;
+    });
+
+    var header = [
+      "// ============================================================================",
+      "// WAYPOINT DENTAL EXPERTISE - INHOUD VAN DE WEBSITE",
+      "// ============================================================================",
+      "// De website wordt automatisch opgebouwd vanuit onderstaande teksten.",
+      "// Pas hier alleen de TEKST aan (tussen de aanhalingstekens \"...\").",
+      "// Let op: houd de aanhalingstekens en komma's op hun plek.",
+      "// De afbeeldingen staan in de map \"assets\".",
+      "// ============================================================================",
+      "",
+      "var WAYPOINT_CONTENT = " + JSON.stringify(out, null, 2) + ";",
+      ""
+    ].join("\n");
+
+    var blob = new Blob([header], { type: "text/javascript;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "Admin Website.js";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }, 500);
+
+    status.hidden = false;
+    status.classList.add("ok");
+    status.textContent = "Download gereed! Vervang nu op GitHub het bestand Admin Website.js en klik op Commit changes.";
+    status.style.display = "block";
+  });
+})();
+</script>
+</body>
+</html>
