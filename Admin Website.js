@@ -7,7 +7,7 @@
 // De afbeeldingen staan in de map "assets".
 // ============================================================================
 
-window.WAYPOINT_CONTENT = {
+var WAYPOINT_CONTENT = {
 
   // ---- Kop (bovenin) -------------------------------------------------------
   header: {

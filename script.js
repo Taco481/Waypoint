@@ -1,5 +1,13 @@
 (function () {
-  var C = window.WAYPOINT_CONTENT;
+  var C = null;
+  if (typeof WAYPOINT_CONTENT !== "undefined") {
+    C = WAYPOINT_CONTENT;
+  } else if (typeof window !== "undefined" && window.WAYPOINT_CONTENT) {
+    C = window.WAYPOINT_CONTENT;
+  }
+
+  if (typeof document === "undefined") return;
+
   var $ = function (id) { return document.getElementById(id); };
 
   function setText(id, text) {
@@ -70,8 +78,7 @@
     setText("dienstenTitle", C.diensten.title);
 
     var cards = $("dienstenCards");
-    (function renderCards() {
-      if (!cards) return;
+    if (cards) {
       cards.innerHTML = "";
       C.diensten.cards.forEach(function (card) {
         var article = document.createElement("article");
@@ -107,7 +114,7 @@
 
         cards.appendChild(article);
       });
-    })();
+    }
 
     setText("werkwijzeEyebrow", C.werkwijze.eyebrow);
     setText("werkwijzeTitle", C.werkwijze.title);
@@ -200,15 +207,17 @@
   var header = $("header");
   var toggle = $("navToggle");
 
-  function onScroll() {
-    if (window.scrollY > 40) {
-      header.classList.add("scrolled");
-    } else {
-      header.classList.remove("scrolled");
+  if (header && typeof window !== "undefined") {
+    function onScroll() {
+      if (window.scrollY > 40) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
     }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
   }
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
 
   function closeNav() {
     var nav = $("nav");
