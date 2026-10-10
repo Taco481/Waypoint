@@ -570,20 +570,21 @@
     return s.replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   }
 
-  function collect() {
-    var out = {};
+  function applyTexts(target) {
     document.querySelectorAll("[data-path]").forEach(function (el) {
       var parts = el.dataset.path.split(".");
-      var cur = out;
+      var cur = target;
       for (var i = 0; i < parts.length - 1; i++) {
-        var next = parts[i + 1];
-        var isIndex = /^\d+$/.test(next);
-        if (typeof cur[parts[i]] === "undefined") cur[parts[i]] = isIndex ? [] : {};
+        if (typeof cur[parts[i]] === "undefined") cur[parts[i]] = {};
         cur = cur[parts[i]];
       }
       cur[parts[parts.length - 1]] = cleanText(el.textContent);
     });
-    return out;
+    return target;
+  }
+
+  function deepCopy(o) {
+    return JSON.parse(JSON.stringify(o));
   }
 
   function showToast(msg) {
@@ -594,7 +595,7 @@
   }
 
   function buildFile() {
-    var out = collect();
+    var out = applyTexts(deepCopy(C));
     return [
       "// ============================================================================",
       "// WAYPOINT DENTAL EXPERTISE - INHOUD VAN DE WEBSITE",
