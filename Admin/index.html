@@ -54,13 +54,93 @@
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
   .toast a { color: #8fd7e1; text-decoration: underline; }
+  .editbar .lock {
+    background: none;
+    color: #0d2b45;
+    border: 1px solid #e2e9ee;
+  }
+  .editbar .lock:hover { background: #f4f8fa; }
+  .editbar { display: none; }
+  .editbar.show { display: flex; }
+  .auth-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 29, 49, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .auth-overlay.hidden { display: none; }
+  .auth-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 36px 32px;
+    width: min(380px, 92vw);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+    text-align: center;
+  }
+  .auth-card h1 {
+    font-family: Fraunces, Georgia, serif;
+    color: #0d2b45;
+    font-size: 1.5rem;
+    margin: 0 0 6px;
+  }
+  .auth-card p.sub {
+    color: #5b7183;
+    font-size: 0.9rem;
+    margin: 0 0 20px;
+  }
+  .auth-card input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e2e9ee;
+    border-radius: 8px;
+    font: inherit;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .auth-card input:focus { outline: 2px solid rgba(28, 126, 140, 0.4); border-color: #1c7e8c; }
+  .auth-card button {
+    width: 100%;
+    border: 0;
+    cursor: pointer;
+    font: 600 0.95rem Inter, sans-serif;
+    padding: 13px 20px;
+    border-radius: 999px;
+    background: #1c7e8c;
+    color: #fff;
+    transition: background 0.15s ease;
+  }
+  .auth-card button:hover { background: #15626e; }
+  .auth-error {
+    color: #c0392b;
+    font-size: 0.85rem;
+    min-height: 1.2em;
+    margin: 0 0 6px;
+  }
 </style>
 </head>
 <body>
 
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <img src="../assets/logo.jpeg" alt="Waypoint" style="height: 56px; margin: 0 auto 14px; border-radius: 8px;">
+    <h1>Beheer website</h1>
+    <p class="sub">Voer het wachtwoord in om de teksten te bewerken.</p>
+    <form id="authForm">
+      <input type="password" id="authPassword" placeholder="Wachtwoord" autocomplete="current-password">
+      <p class="auth-error" id="authError"></p>
+      <button type="submit">Inloggen</button>
+    </form>
+  </div>
+</div>
+
 <div class="editbar">
   <strong>Bewerkmodus</strong>
   <button type="button" id="saveBtn">Download bestand</button>
+  <button type="button" class="lock" id="lockBtn" title="Uitloggen">Slot</button>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -177,7 +257,47 @@
   var C = window.WAYPOINT_CONTENT;
   var $ = function (id) { return document.getElementById(id); };
 
-  if (!C) {
+  var PASSWORD = "githubwaypoint";
+  var STORAGE_KEY = "wp_admin_auth";
+  var overlay = document.getElementById("authOverlay");
+  var editbar = document.querySelector(".editbar");
+  var authForm = document.getElementById("authForm");
+  var authPassword = document.getElementById("authPassword");
+  var authError = document.getElementById("authError");
+
+  function isAuthed() {
+    try { return localStorage.getItem(STORAGE_KEY) === "1"; } catch (e) { return false; }
+  }
+
+  function unlock() {
+    try { localStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
+    overlay.classList.add("hidden");
+    editbar.classList.add("show");
+    authPassword.value = "";
+  }
+
+  if (isAuthed()) {
+    unlock();
+  }
+
+  authForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (authPassword.value === PASSWORD) {
+      authError.textContent = "";
+      unlock();
+    } else {
+      authError.textContent = "Onjuist wachtwoord.";
+      authPassword.value = "";
+      authPassword.focus();
+    }
+  });
+
+  document.getElementById("lockBtn").addEventListener("click", function () {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    location.reload();
+  });
+
+  if (typeof WAYPOINT_CONTENT === "undefined" || !C) {
     alert("Kon de inhoud niet laden. Open deze pagina via de website en ververs.");
     return;
   }
