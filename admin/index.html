@@ -88,6 +88,54 @@
     min-height: 1.2em;
     margin: 0 0 6px;
   }
+  .floatbtns {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 120;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .floatbtns.show { display: flex; }
+  .floatbtns .publish {
+    border: 0;
+    cursor: pointer;
+    font: 600 1rem Inter, sans-serif;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: #1c7e8c;
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(28, 126, 140, 0.45);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .floatbtns .publish:hover { background: #15626e; transform: translateY(-2px); }
+  .floatbtns .token-set {
+    border: 1px solid #e2e9ee;
+    cursor: pointer;
+    background: #fff;
+    color: #0d2b45;
+    font: 600 0.85rem Inter, sans-serif;
+    padding: 8px 16px;
+    border-radius: 999px;
+  }
+  .floatbtns .token-set:hover { background: #f4f8fa; }
+  .auth-card .token-help {
+    font-size: 0.82rem;
+    color: #5b7183;
+    margin: 0 0 14px;
+    text-align: left;
+    line-height: 1.5;
+  }
+  .auth-card .row { display: flex; gap: 10px; }
+  .auth-card .row button { flex: 1; }
+  .auth-card .ghost {
+    background: #f4f8fa;
+    color: #0d2b45;
+    border: 1px solid #e2e9ee;
+  }
+  .auth-card .ghost:hover { background: #e9f1f4; }
 </style>
 </head>
 <body>
@@ -103,6 +151,26 @@
       <button type="submit">Inloggen</button>
     </form>
   </div>
+</div>
+
+<div class="auth-overlay hidden" id="tokenOverlay">
+  <div class="auth-card">
+    <img src="../assets/logo.jpeg" alt="Waypoint" style="height: 56px; margin: 0 auto 14px; border-radius: 8px;">
+    <h1>GitHub-token instellen</h1>
+    <p class="sub">Eénmalig, om automatisch te kunnen publiceren.</p>
+    <p class="token-help">Maak een token aan op GitHub: <strong>Settings &rarr; Developer settings &rarr; <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Fine-grained personal access tokens</a> &rarr; Generate new token</strong>. Geef repository access <strong>“Taco481/Waypoint”</strong> en permission <strong>Contents: Read and write</strong>. Plak de token hieronder. Hij wordt alleen op dit apparaat bewaard.</p>
+    <input type="password" id="tokenInput" placeholder="Token plakken">
+    <p class="auth-error" id="tokenError"></p>
+    <div class="row">
+      <button type="button" id="tokenCancelBtn">Annuleren</button>
+      <button type="button" class="ghost" id="tokenSaveBtn">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<div class="floatbtns" id="floatbtns">
+  <button type="button" class="publish" id="publishBtn">Opslaan &amp; publiceren</button>
+  <button type="button" class="token-set" id="tokenBtn" title="GitHub-token instellen of wijzigen">Instellingen</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -234,6 +302,7 @@
   function unlock() {
     try { localStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
     overlay.classList.add("hidden");
+    document.getElementById("floatbtns").classList.add("show");
     authPassword.value = "";
   }
 
@@ -524,9 +593,9 @@
     setTimeout(function () { t.classList.remove("show"); }, 6000);
   }
 
-  function save() {
+  function buildFile() {
     var out = collect();
-    var header = [
+    return [
       "// ============================================================================",
       "// WAYPOINT DENTAL EXPERTISE - INHOUD VAN DE WEBSITE",
       "// ============================================================================",
@@ -539,22 +608,144 @@
       "var WAYPOINT_CONTENT = " + JSON.stringify(out, null, 2) + ";",
       ""
     ].join("\n");
+  }
 
-    var blob = new Blob([header], { type: "text/javascript;charset=utf-8" });
+  function downloadFallback() {
+    var fileText = buildFile();
+    var blob = new Blob([fileText], { type: "text/javascript;charset=utf-8" });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "Admin Website.js";
     document.body.appendChild(a);
     a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-
-    showToast("Bestand is gedownload. Nu op GitHub vervangen: <strong>Admin Website.js</strong> openen &rarr; penseel-icoon &rarr; alles vervangen &rarr; Commit changes. <a href='https://github.com/Taco481/Waypoint/blob/main/Admin%20Website.js' target='_blank'>Ga naar bestand</a>");
   }
+
+  var TOKEN_KEY = "wp_admin_github_token";
+  var REPO = "Taco481/Waypoint";
+  var REPO_FILE = "Admin Website.js";
+  var BRANCH = "main";
+
+  function getToken() {
+    try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; }
+  }
+
+  function setToken(t) {
+    try { localStorage.setItem(TOKEN_KEY, t); } catch (e) {}
+  }
+
+  var tokenOverlay = $("#tokenOverlay");
+  var tokenInput = $("#tokenInput");
+  var tokenError = $("#tokenError");
+
+  function showTokenModal() {
+    tokenInput.value = "";
+    tokenError.textContent = "";
+    tokenOverlay.classList.remove("hidden");
+  }
+
+  function hideTokenModal() {
+    tokenOverlay.classList.add("hidden");
+  }
+
+  function base64Encode(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+
+  function apiUrl() {
+    return "https://api.github.com/repos/" + REPO + "/contents/" + encodeURIComponent(REPO_FILE);
+  }
+
+  function apiHeaders() {
+    return {
+      "Accept": "application/vnd.github+json",
+      "Authorization": "Bearer " + getToken()
+    };
+  }
+
+  function describeError(status) {
+    if (status === 401) return "Token is ongeldig of verlopen. Stel een nieuw token in via Instellingen.";
+    if (status === 403) return "Token heeft geen schrijf-toestemming (Contents: Read and write) voor deze repository.";
+    if (status === 404) return "Bestand of repository niet gevonden.";
+    if (status === 409) return "Conflict op GitHub. Probeer opnieuw.";
+    return "Foutcode " + status + " van GitHub.";
+  }
+
+  function publish() {
+    var token = getToken();
+    if (!token) {
+      showTokenModal();
+      return;
+    }
+
+    var fileText = buildFile();
+    var contentB64 = base64Encode(fileText);
+
+    showToast("Bezig met publiceren naar GitHub ...");
+
+    fetch(apiUrl(), { headers: apiHeaders() })
+      .then(function (res) {
+        if (!res.ok) {
+          var err = new Error(describeError(res.status));
+          err.status = res.status;
+          throw err;
+        }
+        return res.json();
+      })
+      .then(function (info) {
+        return fetch(apiUrl(), {
+          method: "PUT",
+          headers: apiHeaders(),
+          body: JSON.stringify({
+            message: "Website bijgewerkt via beheerderspagina",
+            content: contentB64,
+            branch: BRANCH,
+            sha: info.sha
+          })
+        });
+      })
+      .then(function (res) {
+        if (!res.ok) {
+          var err = new Error(describeError(res.status));
+          err.status = res.status;
+          throw err;
+        }
+        return res.json();
+      })
+      .then(function () {
+        showToast("Gepubliceerd! De openbare website is over ongeveer 1 minuut bijgewerkt op <a href='https://waypointexpertise.nl' target='_blank'>waypointexpertise.nl</a>.");
+      })
+      .catch(function (err) {
+        if (err.status === 401 || err.status === 403) {
+          showToast(err.message);
+          return;
+        }
+        showToast(err.message + " Een download als reservekopie is gestart &mdash; die kun je handmatig uploaden op <a href='https://github.com/Taco481/Waypoint/blob/main/Admin%20Website.js' target='_blank'>GitHub</a>.");
+        downloadFallback();
+      });
+  }
+
+  $("#publishBtn").addEventListener("click", publish);
+  $("#tokenBtn").addEventListener("click", showTokenModal);
+  $("#tokenSaveBtn").addEventListener("click", function () {
+    var t = tokenInput.value.trim();
+    if (!t) {
+      tokenError.textContent = "Vul de token in.";
+      return;
+    }
+    setToken(t);
+    hideTokenModal();
+    showToast("Token opgeslagen op dit apparaat. Klik opnieuw op Opslaan &amp; publiceren.");
+  });
+  $("#tokenCancelBtn").addEventListener("click", hideTokenModal);
 
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === "s") {
       e.preventDefault();
-      save();
+      publish();
     }
   });
 })();
