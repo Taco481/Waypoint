@@ -169,6 +169,7 @@
     setText("overTitle", C.over.title);
     setText("overP1", C.over.paragraph1);
     setText("overP2", C.over.paragraph2);
+    setText("overCaption", C.over.imageCaption);
 
     setText("ctaTitle", C.contact.title);
     setText("ctaText", C.contact.text);

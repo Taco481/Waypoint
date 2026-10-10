@@ -356,13 +356,25 @@ p { margin: 0 0 1em; }
   gap: 56px;
   align-items: center;
 }
+.over-media {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+}
 .over-image {
+  flex: 1;
   min-height: 360px;
   border-radius: var(--radius);
-  background-image: linear-gradient(rgba(13, 43, 69, 0.12), rgba(13, 43, 69, 0.12)), url("assets/background-4.jpeg");
+  background-image: url("assets/langeveld.jpeg");
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   box-shadow: var(--shadow);
+}
+.over-caption {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
 }
 
 /* ---------- CTA ---------- */
