@@ -286,7 +286,7 @@
 <script>
 (function () {
   var C = window.WAYPOINT_CONTENT;
-  var $ = function (id) { return document.getElementById(id); };
+  var $ = function (id) { return document.getElementById(String(id).replace(/^#/, "")); };
 
   var PASSWORD = "githubwaypoint";
   var STORAGE_KEY = "wp_admin_auth";
