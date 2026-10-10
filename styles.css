@@ -126,23 +126,24 @@ p { margin: 0 0 1em; }
 }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand-logo {
-  height: 46px;
+  height: 66px;
   width: auto;
   border-radius: 8px;
   object-fit: contain;
   background: #fff;
-  padding: 3px 6px;
+  padding: 4px 8px;
   box-shadow: var(--shadow-sm);
 }
 .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
 .brand-name {
   font-family: var(--font-head);
   font-weight: 600;
-  font-size: 1.18rem;
+  font-size: 1.35rem;
   color: var(--navy);
+  white-space: nowrap;
 }
 .brand-sub {
-  font-size: 0.7rem;
+  font-size: 0.74rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
@@ -405,7 +406,7 @@ p { margin: 0 0 1em; }
   font-size: 1.15rem;
 }
 .footer-logo {
-  height: 40px;
+  height: 56px;
   width: auto;
   border-radius: 6px;
   background: #fff;
