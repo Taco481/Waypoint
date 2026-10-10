@@ -3,246 +3,432 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beheer | Waypoint</title>
+<title>Beheer | Waypoint Dental Expertise</title>
+<link rel="icon" href="../assets/logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
 <style>
-:root {
-  --navy: #0d2b45;
-  --teal: #1c7e8c;
-  --text: #26333f;
-  --muted: #5b7183;
-  --line: #e2e9ee;
-  --bg: #f4f8fa;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: "Segoe UI", Inter, system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.55;
-}
-.topbar {
-  background: var(--navy);
-  color: #fff;
-  padding: 26px 24px;
-}
-.topbar h1 { margin: 0 0 8px; font-size: 1.5rem; }
-.topbar p { margin: 0; color: rgba(255,255,255,0.85); max-width: 900px; }
-.topbar code { background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 4px; }
-main { max-width: 980px; margin: 0 auto; padding: 24px; }
-form { display: flex; flex-direction: column; gap: 18px; }
-fieldset {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #fff;
-  padding: 16px 18px 18px;
-  box-shadow: 0 2px 10px rgba(13,43,69,0.06);
-}
-legend { font-weight: 600; color: var(--navy); padding: 0 6px; }
-.group { border-left: 3px solid var(--teal); padding: 4px 12px 12px; margin: 8px 0 0 8px; }
-.group-title { font-size: 0.85rem; color: var(--muted); margin: 8px 0 4px; }
-.field { display: flex; flex-direction: column; gap: 5px; margin-top: 12px; }
-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.02em; }
-textarea {
-  width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font: inherit;
-  color: var(--text);
-  background: #fff;
-  resize: vertical;
-}
-textarea:focus { outline: 2px solid rgba(28,126,140,0.4); border-color: var(--teal); }
-.bar {
-  position: sticky;
-  bottom: 0;
-  background: #fff;
-  border-top: 1px solid var(--line);
-  padding: 14px 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  align-items: center;
-  justify-content: center;
-}
-.bar button, .bar a.btn {
-  border: 0;
-  cursor: pointer;
-  font: 600 0.95rem "Segoe UI", Inter, sans-serif;
-  padding: 13px 30px;
-  border-radius: 999px;
-  text-decoration: none;
-  display: inline-block;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.btn-primary { background: var(--teal); color: #fff; box-shadow: 0 8px 20px rgba(28,126,140,0.35); }
-.btn-primary:hover { transform: translateY(-2px); }
-.btn-link { background: transparent; color: var(--navy); border: 1px solid var(--line); }
-.btn-link:hover { border-color: var(--teal); }
-.note { color: var(--muted); font-size: 0.85rem; }
-.alert {
-  background: #fff3cd;
-  border: 1px solid #ffe08a;
-  border-radius: 10px;
-  padding: 14px 18px;
-  margin: 16px 0;
-}
-.ok {
-  background: #d4edda;
-  border-color: #b7e0bf;
-}
+  .edit { cursor: text; border-radius: 4px; transition: box-shadow 0.12s ease, background 0.12s ease; }
+  .edit:hover { box-shadow: 0 0 0 2px rgba(28,126,140,0.55); }
+  .edit:focus { outline: none; box-shadow: 0 0 0 3px rgba(28,126,140,0.7); background: rgba(255,255,255,0.12); }
+  .editbar {
+    position: fixed;
+    top: 14px; right: 14px;
+    z-index: 100;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #fff;
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(13,43,69,0.25);
+    padding: 8px 10px 8px 18px;
+  }
+  .editbar strong { font-size: 0.85rem; color: #0d2b45; }
+  .editbar button {
+    border: 0;
+    cursor: pointer;
+    font: 600 0.9rem Inter, sans-serif;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: #1c7e8c;
+    color: #fff;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .editbar button:hover { background: #15626e; transform: translateY(-1px); }
+  .toast {
+    position: fixed;
+    bottom: 22px; left: 50%;
+    transform: translateX(-50%);
+    background: #0d2b45;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    z-index: 110;
+    box-shadow: 0 12px 34px rgba(13,43,69,0.4);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+  .toast a { color: #8fd7e1; text-decoration: underline; }
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <h1>Waypoint — Beheer website</h1>
-  <p>Bewerk de teksten hieronder. Klik daarna op <strong>Download Admin Website.js</strong>, ga naar
-  <code>github.com/Taco481/Waypoint</code> &rarr; open het bestand &ldquo;Admin Website.js&rdquo; &rarr;
-  klik op het <strong>penseel-icoontje</strong> &rarr; vervang alle tekst door de nieuwe inhoud &rarr; onderaan
-  &ldquo;Commit changes&rdquo;. Binnen een minuut staat de site bijgewerkt online.</p>
+<div class="editbar">
+  <strong>Bewerkmodus</strong>
+  <button type="button" id="saveBtn">Download bestand</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<header class="site-header" id="header">
+  <div class="container header-inner">
+    <span class="brand" aria-label="Waypoint Dental Expertise - home">
+      <img src="../assets/logo.jpeg" alt="Waypoint Dental Expertise" class="brand-logo">
+      <span class="brand-text">
+        <span class="brand-name" id="brandName"></span>
+        <span class="brand-sub" id="brandSub"></span>
+      </span>
+    </span>
+    <nav class="nav" id="nav" aria-label="Hoofdnavigatie"></nav>
+  </div>
 </header>
 
-<main>
-  <div class="alert" id="status" hidden></div>
-  <form id="form"></form>
+<main id="top">
+
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <p class="eyebrow hero-eyebrow" id="heroEyebrow"></p>
+      <h1 id="heroTitle"></h1>
+      <p class="lead" id="heroLead"></p>
+      <div class="hero-actions" id="heroActions"></div>
+      <ul class="hero-badges" id="heroBadges"></ul>
+    </div>
+  </section>
+
+  <section class="intro section">
+    <div class="container intro-grid">
+      <div class="intro-text">
+        <p class="eyebrow" id="introEyebrow"></p>
+        <h2 id="introTitle"></h2>
+        <p id="introP1"></p>
+        <p id="introP2"></p>
+      </div>
+      <div class="intro-card">
+        <p class="intro-card-quote" id="introCardQuote"></p>
+        <p class="intro-card-sub" id="introCardSub"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="diensten" class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" id="dienstenEyebrow"></p>
+        <h2 id="dienstenTitle"></h2>
+      </div>
+      <div class="cards" id="dienstenCards"></div>
+    </div>
+  </section>
+
+  <section id="werkwijze" class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" id="werkwijzeEyebrow"></p>
+        <h2 id="werkwijzeTitle"></h2>
+      </div>
+      <ol class="steps" id="werkwijzeSteps"></ol>
+    </div>
+  </section>
+
+  <section id="waarom" class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" id="waaromEyebrow"></p>
+        <h2 id="waaromTitle"></h2>
+      </div>
+      <div class="features" id="waaromFeatures"></div>
+    </div>
+  </section>
+
+  <section id="over" class="section over">
+    <div class="container over-grid">
+      <div class="over-text">
+        <p class="eyebrow" id="overEyebrow"></p>
+        <h2 id="overTitle"></h2>
+        <p id="overP1"></p>
+        <p id="overP2"></p>
+      </div>
+      <figure class="over-media">
+        <div class="over-image" aria-hidden="true"></div>
+        <figcaption class="over-caption edit" contenteditable="true" data-path="over.imageCaption" id="overCaption"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="contact" class="section cta">
+    <div class="container cta-inner">
+      <h2 id="ctaTitle"></h2>
+      <p id="ctaText"></p>
+      <div class="cta-actions" id="ctaActions"></div>
+    </div>
+  </section>
+
 </main>
 
-<div class="bar">
-  <button type="submit" class="btn-primary" form="form" id="downloadBtn">Download Admin Website.js</button>
-  <a href="../Admin%20Website.js" target="_blank" class="btn btn-link">Bekijk Admin Website.js (leesbaar)</a>
-  <a href="../" target="_blank" class="btn btn-link">Bekijk de website</a>
-</div>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="../assets/logo.jpeg" alt="Waypoint Dental Expertise" class="footer-logo">
+      <span class="edit" id="footerBrandName"></span>
+    </div>
+    <nav class="footer-nav" id="footerNav" aria-label="Voetnavigatie"></nav>
+    <p class="footer-copy">&copy; <span id="year"></span> <span class="edit" id="footerCopy"></span></p>
+  </div>
+</footer>
 
 <script src="../Admin%20Website.js"></script>
 <script>
 (function () {
-  var C = (typeof WAYPOINT_CONTENT !== "undefined") ? WAYPOINT_CONTENT : null;
-  var status = document.getElementById("status");
+  var C = window.WAYPOINT_CONTENT;
+  var $ = function (id) { return document.getElementById(id); };
 
   if (!C) {
-    status.hidden = false;
-    status.classList.remove("ok");
-    status.textContent = "Kon de huidige inhoud niet laden. Open deze pagina via het Waypoint-domein en ververs de pagina.";
-    status.style.display = "block";
+    alert("Kon de inhoud niet laden. Open deze pagina via de website en ververs.");
     return;
   }
 
-  var LABELS = {
-    name: "Naam",
-    subtitle: "Ondertitel",
-    label: "Label",
-    href: "Link naar",
-    eyebrow: "Bovenkopje",
-    title: "Titel",
-    lead: "Intro alinea",
-    paragraph1: "Alinea 1",
-    paragraph2: "Alinea 2",
-    cardQuote: "Citaat in kaart",
-    cardSub: "Onderschrift kaart",
-    sub: "Overschrift",
-    text: "Tekst",
-    paragraphs: "Tekstblokken",
-    highlight: "Uitgelicht (optioneel)",
-    icon: "Icoon (niet wijzigen)",
-    links: "Menu onderdelen",
-    contact: "Contact menu",
-    steps: "Stappen",
-    features: "Redenen",
-    cards: "Kaarten (dienstverlening)",
-    imageCaption: "Bijschrift foto",
-    email: "E-mailadres",
-    emailLabel: "E-mail tekst op knop",
-    phone: "Telefoonnummer",
-    phoneLabel: "Telefoon tekst op knop",
-    copy: "Tekst in voettekst",
-    header: "Kop (header)",
-    nav: "Menu",
-    hero: "Eerste scherm",
-    intro: "Inleiding",
-    diensten: "Onze dienstverlening",
-    werkwijze: "Onze werkwijze",
-    waarom: "Waarom Waypoint",
-    over: "Over ons",
-    contactBlock: "Contact",
-    footer: "Voettekst"
+  function setEditable(idOrEl, path) {
+    var el = typeof idOrEl === "string" ? $(idOrEl) : idOrEl;
+    if (!el) return;
+    el.classList.add("edit");
+    el.setAttribute("contenteditable", "true");
+    el.setAttribute("data-path", path);
+  }
+
+  function setText(id, text) {
+    var el = $(id);
+    if (el) el.textContent = text;
+  }
+
+  var ICONS = {
+    advocaat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 8h14M5 8l-2 6a3 3 0 0 0 6 0L7 8M19 8l-2 6a3 3 0 0 0 6 0l-2-6"/></svg>',
+    verzekeraar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>',
+    particulier: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>'
   };
+  var DEFAULT_ICON = ICONS.advocaat;
 
-  function humanize(path) {
-    var keys = path.split(".");
-    var key = keys[keys.length - 1];
-    if (LABELS[key]) return LABELS[key];
-    return key.charAt(0).toUpperCase() + key.slice(1);
-  }
+  function render() {
+    setText("brandName", C.header.name);
+    setEditable("brandName", "header.name");
+    setText("brandSub", C.header.subtitle);
+    setEditable("brandSub", "header.subtitle");
 
-  function addInput(parent, path, value) {
-    var wrap = document.createElement("div");
-    wrap.className = "field";
-
-    var label = document.createElement("label");
-    label.textContent = humanize(path);
-
-    var ta = document.createElement("textarea");
-    ta.rows = Math.max(2, Math.min(8, Math.ceil(String(value).length / 90)));
-    ta.value = value === null || typeof value === "undefined" ? "" : String(value);
-    ta.dataset.path = path;
-
-    if (/\.icon$/.test(path)) ta.disabled = true;
-
-    wrap.appendChild(label);
-    wrap.appendChild(ta);
-    parent.appendChild(wrap);
-  }
-
-  function build(parent, obj, prefix) {
-    Object.keys(obj).forEach(function (key) {
-      var path = prefix ? prefix + "." + key : key;
-      var val = obj[key];
-
-      if (typeof val === "string") {
-        addInput(parent, path, val);
-      } else if (Array.isArray(val)) {
-        var fs = document.createElement("fieldset");
-        var legend = document.createElement("legend");
-        legend.textContent = humanize(path);
-        fs.appendChild(legend);
-
-        val.forEach(function (item, i) {
-          if (item && typeof item === "object") {
-            var sub = document.createElement("div");
-            sub.className = "group";
-            var gTitle = document.createElement("div");
-            gTitle.className = "group-title";
-            gTitle.textContent = (i + 1) + ". " + humanize(path);
-            sub.appendChild(gTitle);
-            build(sub, item, path + "." + i);
-            fs.appendChild(sub);
-          } else {
-            addInput(fs, path + "." + i, item);
-          }
-        });
-
-        parent.appendChild(fs);
-      } else if (val && typeof val === "object") {
-        var fs = document.createElement("fieldset");
-        var legend = document.createElement("legend");
-        legend.textContent = humanize(path);
-        fs.appendChild(legend);
-        build(fs, val, path);
-        parent.appendChild(fs);
-      }
+    var nav = $("nav");
+    nav.innerHTML = "";
+    nav.addEventListener("click", function (e) { e.preventDefault(); });
+    C.nav.links.forEach(function (link, i) {
+      var a = document.createElement("a");
+      a.href = link.href;
+      a.textContent = link.label;
+      setEditable(a, "nav.links." + i + ".label");
+      nav.appendChild(a);
     });
+    var cta = document.createElement("a");
+    cta.href = C.nav.contact.href;
+    cta.textContent = C.nav.contact.label;
+    cta.className = "nav-cta";
+    setEditable(cta, "nav.contact.label");
+    nav.appendChild(cta);
+
+    setText("heroEyebrow", C.hero.eyebrow);
+    setEditable("heroEyebrow", "hero.eyebrow");
+    setText("heroTitle", C.hero.title);
+    setEditable("heroTitle", "hero.title");
+    setText("heroLead", C.hero.lead);
+    setEditable("heroLead", "hero.lead");
+
+    var heroActions = $("heroActions");
+    heroActions.innerHTML = "";
+    [["heroCtaPrimary", C.hero.ctaPrimary], ["heroCtaSecondary", C.hero.ctaSecondary]].forEach(function (pair) {
+      var a = document.createElement("a");
+      a.className = pair[0] === "heroCtaPrimary" ? "btn btn-primary" : "btn btn-ghost";
+      a.href = pair[1].href;
+      a.textContent = pair[1].label;
+      setEditable(a, pair[0] === "heroCtaPrimary" ? "hero.ctaPrimary.label" : "hero.ctaSecondary.label");
+      heroActions.appendChild(a);
+    });
+    heroActions.addEventListener("click", function (e) { e.preventDefault(); });
+
+    var badges = $("heroBadges");
+    badges.innerHTML = "";
+    C.hero.badges.forEach(function (b, i) {
+      var li = document.createElement("li");
+      li.textContent = b;
+      setEditable(li, "hero.badges." + i);
+      badges.appendChild(li);
+    });
+
+    setText("introEyebrow", C.intro.eyebrow);
+    setEditable("introEyebrow", "intro.eyebrow");
+    setText("introTitle", C.intro.title);
+    setEditable("introTitle", "intro.title");
+    setText("introP1", C.intro.paragraph1);
+    setEditable("introP1", "intro.paragraph1");
+    setText("introP2", C.intro.paragraph2);
+    setEditable("introP2", "intro.paragraph2");
+    setText("introCardQuote", C.intro.cardQuote);
+    setEditable("introCardQuote", "intro.cardQuote");
+    setText("introCardSub", C.intro.cardSub);
+    setEditable("introCardSub", "intro.cardSub");
+
+    setText("dienstenEyebrow", C.diensten.eyebrow);
+    setEditable("dienstenEyebrow", "diensten.eyebrow");
+    setText("dienstenTitle", C.diensten.title);
+    setEditable("dienstenTitle", "diensten.title");
+
+    var cards = $("dienstenCards");
+    C.diensten.cards.forEach(function (card, i) {
+      var base = "diensten.cards." + i;
+
+      var article = document.createElement("article");
+      article.className = "card";
+
+      var icon = document.createElement("div");
+      icon.className = "card-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.innerHTML = ICONS[card.icon] || DEFAULT_ICON;
+      article.appendChild(icon);
+
+      var h3 = document.createElement("h3");
+      h3.textContent = card.title;
+      setEditable(h3, base + ".title");
+      article.appendChild(h3);
+
+      var sub = document.createElement("p");
+      sub.className = "card-sub";
+      sub.textContent = card.sub;
+      setEditable(sub, base + ".sub");
+      article.appendChild(sub);
+
+      card.paragraphs.forEach(function (p, j) {
+        var pEl = document.createElement("p");
+        pEl.textContent = p;
+        setEditable(pEl, base + ".paragraphs." + j);
+        article.appendChild(pEl);
+      });
+
+      if (card.highlight) {
+        var hi = document.createElement("p");
+        hi.className = "card-highlight";
+        hi.textContent = card.highlight;
+        setEditable(hi, base + ".highlight");
+        article.appendChild(hi);
+      }
+
+      cards.appendChild(article);
+    });
+
+    setText("werkwijzeEyebrow", C.werkwijze.eyebrow);
+    setEditable("werkwijzeEyebrow", "werkwijze.eyebrow");
+    setText("werkwijzeTitle", C.werkwijze.title);
+    setEditable("werkwijzeTitle", "werkwijze.title");
+
+    var steps = $("werkwijzeSteps");
+    C.werkwijze.steps.forEach(function (step, i) {
+      var li = document.createElement("li");
+      li.className = "step";
+
+      var num = document.createElement("span");
+      num.className = "step-num";
+      num.textContent = "0" + (i + 1);
+      li.appendChild(num);
+
+      var h3 = document.createElement("h3");
+      h3.textContent = step.title;
+      setEditable(h3, "werkwijze.steps." + i + ".title");
+      li.appendChild(h3);
+
+      var p = document.createElement("p");
+      p.textContent = step.text;
+      setEditable(p, "werkwijze.steps." + i + ".text");
+      li.appendChild(p);
+
+      steps.appendChild(li);
+    });
+
+    setText("waaromEyebrow", C.waarom.eyebrow);
+    setEditable("waaromEyebrow", "waarom.eyebrow");
+    setText("waaromTitle", C.waarom.title);
+    setEditable("waaromTitle", "waarom.title");
+
+    var features = $("waaromFeatures");
+    C.waarom.features.forEach(function (feature, i) {
+      var div = document.createElement("div");
+      div.className = "feature";
+
+      var h3 = document.createElement("h3");
+      h3.textContent = feature.title;
+      setEditable(h3, "waarom.features." + i + ".title");
+      div.appendChild(h3);
+
+      var p = document.createElement("p");
+      p.textContent = feature.text;
+      setEditable(p, "waarom.features." + i + ".text");
+      div.appendChild(p);
+
+      features.appendChild(div);
+    });
+
+    setText("overEyebrow", C.over.eyebrow);
+    setEditable("overEyebrow", "over.eyebrow");
+    setText("overTitle", C.over.title);
+    setEditable("overTitle", "over.title");
+    setText("overP1", C.over.paragraph1);
+    setEditable("overP1", "over.paragraph1");
+    setText("overP2", C.over.paragraph2);
+    setEditable("overP2", "over.paragraph2");
+    setText("overCaption", C.over.imageCaption);
+
+    setText("ctaTitle", C.contact.title);
+    setEditable("ctaTitle", "contact.title");
+    setText("ctaText", C.contact.text);
+    setEditable("ctaText", "contact.text");
+
+    var ctaActions = $("ctaActions");
+    ctaActions.innerHTML = "";
+    [
+      ["ctaEmail", C.contact.emailLabel, "email"],
+      ["ctaPhone", C.contact.phoneLabel, "phone"]
+    ].forEach(function (pair) {
+      var a = document.createElement("a");
+      a.className = pair[2] === "email" ? "btn btn-primary" : "btn btn-ghost-light";
+      a.href = pair[2] === "email" ? "mailto:" + C.contact.email : "tel:" + C.contact.phone;
+      a.textContent = pair[1];
+      setEditable(a, "contact." + pair[2] + "Label");
+      ctaActions.appendChild(a);
+    });
+    ctaActions.addEventListener("click", function (e) { e.preventDefault(); });
+
+    setText("footerBrandName", C.footer.name);
+    setText("footerCopy", C.footer.copy);
+    setText("year", new Date().getFullYear());
+
+    var footerNav = $("footerNav");
+    footerNav.innerHTML = "";
+    footerNav.addEventListener("click", function (e) { e.preventDefault(); });
+    C.nav.links.forEach(function (link, i) {
+      var a = document.createElement("a");
+      a.href = link.href;
+      a.textContent = link.label;
+      setEditable(a, "nav.links." + i + ".label");
+      footerNav.appendChild(a);
+    });
+    var c = document.createElement("a");
+    c.href = C.nav.contact.href;
+    c.textContent = C.nav.contact.label;
+    setEditable(c, "nav.contact.label");
+    footerNav.appendChild(c);
   }
 
-  build(document.getElementById("form"), C, "");
+  render();
 
-  document.getElementById("form").addEventListener("submit", function (e) {
-    e.preventDefault();
+  document.querySelectorAll("a[href^='#']").forEach(function (a) {
+    a.addEventListener("click", function (e) { e.preventDefault(); });
+  });
 
+  function cleanText(s) {
+    return s.replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
+  function collect() {
     var out = {};
-    document.querySelectorAll("#form textarea").forEach(function (ta) {
-      var parts = ta.dataset.path.split(".");
+    document.querySelectorAll("[data-path]").forEach(function (el) {
+      var parts = el.dataset.path.split(".");
       var cur = out;
       for (var i = 0; i < parts.length - 1; i++) {
         var next = parts[i + 1];
@@ -250,9 +436,20 @@ textarea:focus { outline: 2px solid rgba(28,126,140,0.4); border-color: var(--te
         if (typeof cur[parts[i]] === "undefined") cur[parts[i]] = isIndex ? [] : {};
         cur = cur[parts[i]];
       }
-      cur[parts[parts.length - 1]] = ta.value;
+      cur[parts[parts.length - 1]] = cleanText(el.textContent);
     });
+    return out;
+  }
 
+  function showToast(msg) {
+    var t = $("#toast");
+    t.innerHTML = msg;
+    t.classList.add("show");
+    setTimeout(function () { t.classList.remove("show"); }, 6000);
+  }
+
+  function save() {
+    var out = collect();
     var header = [
       "// ============================================================================",
       "// WAYPOINT DENTAL EXPERTISE - INHOUD VAN DE WEBSITE",
@@ -273,15 +470,17 @@ textarea:focus { outline: 2px solid rgba(28,126,140,0.4); border-color: var(--te
     a.download = "Admin Website.js";
     document.body.appendChild(a);
     a.click();
-    setTimeout(function () {
-      URL.revokeObjectURL(a.href);
-      a.remove();
-    }, 500);
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 
-    status.hidden = false;
-    status.classList.add("ok");
-    status.textContent = "Download gereed! Vervang nu op GitHub het bestand Admin Website.js en klik op Commit changes.";
-    status.style.display = "block";
+    showToast("Bestand is gedownload. Nu op GitHub vervangen: <strong>Admin Website.js</strong> openen &rarr; penseel-icoon &rarr; alles vervangen &rarr; Commit changes. <a href='https://github.com/Taco481/Waypoint/blob/main/Admin%20Website.js' target='_blank'>Ga naar bestand</a>");
+  }
+
+  $("#saveBtn").addEventListener("click", save);
+  document.addEventListener("keydown", function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+      e.preventDefault();
+      save();
+    }
   });
 })();
 </script>
