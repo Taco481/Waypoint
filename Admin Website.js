@@ -106,7 +106,7 @@ var WAYPOINT_CONTENT = {
     "steps": [
       {
         "title": "Inventarisatie",
-        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling. De inventarisatiefase is kosteloos.Stuur een email met uw gegevens en wij nemen contact met u op voor een vrijblijvend inventarisatiegesprek."
+        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling. De inventarisatiefase is kosteloos.<div><br></div><div>Stuur een email met uw gegevens en wij nemen contact met u op voor een <b>vrijblijvend inventarisatiegesprek.</b></div>"
       },
       {
         "title": "Analyse",
@@ -149,7 +149,7 @@ var WAYPOINT_CONTENT = {
     "title": "Kennis, zorgvuldigheid en een onafhankelijk oordeel",
     "paragraph1": "Waypoint Dental Expertise is opgericht vanuit de overtuiging dat goede tandheelkundige besluitvorming begint met kennis, zorgvuldigheid en een onafhankelijk oordeel.",
     "paragraph2": "Met een achtergrond in de klinische tandheelkunde bieden wij advies op het snijvlak van tandheelkundige zorg, juridische vraagstukken en letselschade.",
-    "imageCaption": "M.Sc. D.J.Langeveld - adviserend tandarts"
+    "imageCaption": "<span style=\"font-size: 1.5em;\">M.Sc. D.J.Langeveld - adviserend tandarts</span>"
   },
   "contact": {
     "title": "Een deskundig en onafhankelijk advies nodig?",
