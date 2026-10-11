@@ -106,7 +106,7 @@ var WAYPOINT_CONTENT = {
     "steps": [
       {
         "title": "Inventarisatie",
-        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling."
+        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling. de inventarisatie"
       },
       {
         "title": "Analyse",
@@ -157,7 +157,7 @@ var WAYPOINT_CONTENT = {
     "email": "info@waypointexpertise.nl",
     "emailLabel": "info@waypointexpertise.nl",
     "phone": "+31000000000",
-    "phoneLabel": ""
+    "phoneLabel": "Bel ons"
   },
   "footer": {
     "name": "Waypoint Dental Expertise",
