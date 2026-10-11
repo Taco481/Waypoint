@@ -128,7 +128,7 @@ var WAYPOINT_CONTENT = {
     "features": [
       {
         "title": "Klinische ervaring",
-        "text": "Tandheelkundige vraagstukken worden beoordeeld vanuit kennis van de dagelijkse tandheelkundige praktijk en de klinische besluitvorming die daarbij hoort."
+        "text": "Tandheelkundige vraagstukken worden beoordeeld vanuit ruime kennis en ervaring in de dagelijkse tandheelkundige praktijk en de klinische besluitvorming die daarbij hoort."
       },
       {
         "title": "Onafhankelijk oordeel",
