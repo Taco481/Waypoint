@@ -231,12 +231,35 @@
   <button type="button" data-cmd="underline" title="Onderstreept"><u>U</u></button>
   <button type="button" data-cmd="removeFormat" title="Opmaak wissen">&times;</button>
   <span class="fmt-sep"></span>
-  <select id="fmtSize" title="Tekstgrootte">
-    <option value="">Grootte</option>
-    <option value="small">Klein</option>
-    <option value="large">Groot</option>
-    <option value="xlarge">Extra groot</option>
+  <select id="fmtFont" title="Lettertype">
+    <option value="">Lettertype</option>
+    <option value="Inter, sans-serif">Inter</option>
+    <option value="Fraunces, serif">Fraunces</option>
+    <option value="Georgia, serif">Georgia</option>
+    <option value="Arial, Helvetica, sans-serif">Arial</option>
+    <option value="&quot;Times New Roman&quot;, Times, serif">Times New Roman</option>
+    <option value="Verdana, Geneva, sans-serif">Verdana</option>
+    <option value="&quot;Courier New&quot;, Courier, monospace">Courier New</option>
   </select>
+  <select id="fmtSize" title="Tekstgrootte (punten)">
+    <option value="">Grootte</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="14">14</option>
+    <option value="16">16</option>
+    <option value="18">18</option>
+    <option value="20">20</option>
+    <option value="24">24</option>
+    <option value="28">28</option>
+    <option value="32">32</option>
+    <option value="36">36</option>
+    <option value="48">48</option>
+    <option value="72">72</option>
+  </select>
+  <span class="fmt-sep"></span>
   <input type="color" id="fmtColor" value="#0d2b45" title="Tekstkleur">
 </div>
 
@@ -813,11 +836,24 @@
       var span = document.createElement("span");
       var color = f.getAttribute("color");
       var size = f.getAttribute("size");
+      var face = f.getAttribute("face");
       if (color) span.style.color = color;
+      if (face) span.style.fontFamily = face;
       if (size) {
         var map = { "1": "0.75em", "2": "0.85em", "3": "1em", "4": "1.25em", "5": "1.5em", "6": "2em", "7": "2.4em" };
         span.style.fontSize = map[String(size)] || "1em";
       }
+      while (f.firstChild) span.appendChild(f.firstChild);
+      f.parentNode.replaceChild(span, f);
+    });
+  }
+
+  function applyFontSize(pt) {
+    if (!restoreSelection()) return;
+    document.execCommand("fontSize", false, "7");
+    document.querySelectorAll('font[size="7"]').forEach(function (f) {
+      var span = document.createElement("span");
+      span.style.fontSize = pt + "pt";
       while (f.firstChild) span.appendChild(f.firstChild);
       f.parentNode.replaceChild(span, f);
     });
@@ -859,12 +895,18 @@
       });
     });
 
+    var fmtFont = $("fmtFont");
+    fmtFont.addEventListener("change", function () {
+      if (fmtFont.value && restoreSelection()) {
+        document.execCommand("fontName", false, fmtFont.value);
+        normalizeFonts();
+      }
+    });
+
     var fmtSize = $("fmtSize");
     fmtSize.addEventListener("change", function () {
-      var map = { small: "2", large: "5", xlarge: "6" };
-      if (map[fmtSize.value] && restoreSelection()) {
-        document.execCommand("fontSize", false, map[fmtSize.value]);
-        normalizeFonts();
+      if (fmtSize.value) {
+        applyFontSize(fmtSize.value);
       }
       fmtSize.value = "";
     });
