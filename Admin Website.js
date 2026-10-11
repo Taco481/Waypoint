@@ -148,7 +148,7 @@ var WAYPOINT_CONTENT = {
     "eyebrow": "Over Waypoint Dental Expertise",
     "title": "Kennis, zorgvuldigheid en een onafhankelijk oordeel",
     "paragraph1": "Waypoint Dental Expertise is opgericht vanuit de overtuiging dat goede tandheelkundige besluitvorming begint met kennis, zorgvuldigheid en een onafhankelijk oordeel.",
-    "paragraph2": "Met een achtergrond in de klinische tandheelkunde bieden wij advies op het snijvlak van tandheelkundige zorg, juridische vraagstukken en letselschade.",
+    "paragraph2": "Met een ruime achtergrond in de algemene en restauratieve tandheelkunde bieden wij advies op het snijvlak van tandheelkundige zorg, juridische vraagstukken en letselschade.",
     "imageCaption": "<span style=\"font-size: 16pt;\">M.Sc. D.J. Langeveld - adviserend tandarts</span>"
   },
   "contact": {
