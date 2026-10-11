@@ -106,7 +106,7 @@ var WAYPOINT_CONTENT = {
     "steps": [
       {
         "title": "Inventarisatie",
-        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling."
+        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling. de inventarisatiefase is kosteloos."
       },
       {
         "title": "Analyse",
