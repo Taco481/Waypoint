@@ -149,7 +149,7 @@ var WAYPOINT_CONTENT = {
     "title": "Kennis, zorgvuldigheid en een onafhankelijk oordeel",
     "paragraph1": "Waypoint Dental Expertise is opgericht vanuit de overtuiging dat goede tandheelkundige besluitvorming begint met kennis, zorgvuldigheid en een onafhankelijk oordeel.",
     "paragraph2": "Met een achtergrond in de klinische tandheelkunde bieden wij advies op het snijvlak van tandheelkundige zorg, juridische vraagstukken en letselschade.",
-    "imageCaption": "M.Sc. D.J.Langeveld - Tandarts"
+    "imageCaption": "M.Sc. D.J.Langeveld - adviserend tandarts"
   },
   "contact": {
     "title": "Een deskundig en onafhankelijk advies nodig?",
