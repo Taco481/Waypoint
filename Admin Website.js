@@ -91,7 +91,7 @@ var WAYPOINT_CONTENT = {
         "title": "Voor particulieren",
         "sub": "Zekerheid over uw tandheelkundige behandeling.",
         "paragraphs": [
-          "Overweegt u een second opinion?Een uitgebreid behandelplan, een ingrijpende gebitsrenovatie of een kostbare tandheelkundige behandeling kan vragen oproepen. Is de voorgestelde behandeling noodzakelijk? Zijn er alternatieven? Past het behandelplan bij uw situatie en verwachtingen?",
+          "Een uitgebreid behandelplan, een ingrijpende gebitsrenovatie of een kostbare tandheelkundige behandeling kan vragen oproepen. Is de voorgestelde behandeling noodzakelijk? Zijn er alternatieven? Past het behandelplan bij uw situatie en verwachtingen?",
           "Wanneer u behoefte heeft aan een onafhankelijke blik, kan Waypoint Dental Expertise uw behandelplan en de beschikbare tandheelkundige documentatie beoordelen.",
           "Wij helpen u de voorgestelde behandeling beter te begrijpen, brengen eventuele alternatieven in kaart en geven u een helder inzicht in de overwegingen die bij uw behandeling een rol spelen.",
           "Ook wanneer u twijfelt over een eerder uitgevoerde behandeling of behoefte heeft aan een second opinion, kunt u bij ons terecht."
