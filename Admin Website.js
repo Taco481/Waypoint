@@ -106,7 +106,7 @@ var WAYPOINT_CONTENT = {
     "steps": [
       {
         "title": "Inventarisatie",
-        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling. De inventarisatiefase is kosteloos."
+        "text": "We bespreken uw vraag en brengen in kaart welke informatie nodig is voor een zorgvuldige beoordeling. De inventarisatiefase is kosteloos.Stuur een email met uw gegevens en wij nemen contact met u op voor een vrijblijvend inventarisatiegesprek."
       },
       {
         "title": "Analyse",
@@ -153,7 +153,7 @@ var WAYPOINT_CONTENT = {
   },
   "contact": {
     "title": "Een deskundig en onafhankelijk advies nodig?",
-    "text": "Neem contact op om uw tandheelkundige vraagstuk te bespreken. Wij denken graag met u mee.",
+    "text": "Neem contact op om uw tandheelkundige vraagstuk te bespreken. Wij denken graag met u mee.Stuur een email met uw gegevens en wij nemen contact met u op voor een vrijblijvend inventarisatiegesprek.",
     "email": "info@waypointexpertise.nl",
     "emailLabel": "info@waypointexpertise.nl"
   },
