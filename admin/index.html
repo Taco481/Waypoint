@@ -255,7 +255,7 @@
         <p id="overP2"></p>
       </div>
       <figure class="over-media">
-        <div class="over-image" aria-hidden="true"></div>
+        <img class="over-image" src="../assets/langeveld.jpeg" alt="">
         <figcaption class="over-caption edit" contenteditable="true" data-path="over.imageCaption" id="overCaption"></figcaption>
       </figure>
     </div>
@@ -525,18 +525,12 @@
     setEditable("ctaText", "contact.text");
 
     var ctaActions = $("ctaActions");
-    ctaActions.innerHTML = "";
-    [
-      ["ctaEmail", C.contact.emailLabel, "email"],
-      ["ctaPhone", C.contact.phoneLabel, "phone"]
-    ].forEach(function (pair) {
-      var a = document.createElement("a");
-      a.className = pair[2] === "email" ? "btn btn-primary" : "btn btn-ghost-light";
-      a.href = pair[2] === "email" ? "mailto:" + C.contact.email : "tel:" + C.contact.phone;
-      a.textContent = pair[1];
-      setEditable(a, "contact." + pair[2] + "Label");
-      ctaActions.appendChild(a);
-    });
+    var emailBtn = document.createElement("a");
+    emailBtn.className = "btn btn-primary";
+    emailBtn.href = "mailto:" + C.contact.email;
+    emailBtn.textContent = C.contact.emailLabel;
+    setEditable(emailBtn, "contact.emailLabel");
+    ctaActions.appendChild(emailBtn);
     ctaActions.addEventListener("click", function (e) { e.preventDefault(); });
 
     setText("footerBrandName", C.footer.name);

@@ -155,9 +155,7 @@ var WAYPOINT_CONTENT = {
     "title": "Een deskundig en onafhankelijk advies nodig?",
     "text": "Neem contact op om uw tandheelkundige vraagstuk te bespreken. Wij denken graag met u mee.",
     "email": "info@waypointexpertise.nl",
-    "emailLabel": "info@waypointexpertise.nl",
-    "phone": "+31000000000",
-    "phoneLabel": ""
+    "emailLabel": "info@waypointexpertise.nl"
   },
   "footer": {
     "name": "Waypoint Dental Expertise",

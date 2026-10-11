@@ -174,7 +174,6 @@
     setText("ctaTitle", C.contact.title);
     setText("ctaText", C.contact.text);
     setLink("ctaEmail", C.contact.emailLabel, "mailto:" + C.contact.email);
-    setLink("ctaPhone", C.contact.phoneLabel, "tel:" + C.contact.phone);
 
     setText("footerBrandName", C.footer.name);
     setText("footerCopy", C.footer.copy);

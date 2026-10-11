@@ -126,7 +126,7 @@ p { margin: 0 0 1em; }
 }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand-logo {
-  height: 66px;
+  height: 86px;
   width: auto;
   border-radius: 8px;
   object-fit: contain;
@@ -363,17 +363,19 @@ p { margin: 0 0 1em; }
   margin: 0;
 }
 .over-image {
-  flex: 1;
-  min-height: 360px;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
   border-radius: var(--radius);
-  background-image: url("assets/langeveld.jpeg");
-  background-size: cover;
-  background-position: center top;
   box-shadow: var(--shadow);
+  background: #fff;
 }
 .over-caption {
-  font-size: 0.82rem;
-  color: var(--muted);
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--navy);
   text-align: center;
 }
 
@@ -418,7 +420,7 @@ p { margin: 0 0 1em; }
   font-size: 1.15rem;
 }
 .footer-logo {
-  height: 56px;
+  height: 70px;
   width: auto;
   border-radius: 6px;
   background: #fff;
