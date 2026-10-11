@@ -12,13 +12,13 @@
 
   function setText(id, text) {
     var el = $(id);
-    if (el) el.textContent = text;
+    if (el) el.innerHTML = text;
   }
 
   function setLink(id, label, href) {
     var el = $(id);
     if (!el) return;
-    el.textContent = label;
+    el.innerHTML = label;
     el.setAttribute("href", href);
   }
 
@@ -41,12 +41,12 @@
       C.nav.links.forEach(function (link) {
         var a = document.createElement("a");
         a.href = link.href;
-        a.textContent = link.label;
+        a.innerHTML = link.label;
         nav.appendChild(a);
       });
       var cta = document.createElement("a");
       cta.href = C.nav.contact.href;
-      cta.textContent = C.nav.contact.label;
+      cta.innerHTML = C.nav.contact.label;
       cta.className = "nav-cta";
       nav.appendChild(cta);
     }
@@ -62,7 +62,7 @@
       badges.innerHTML = "";
       C.hero.badges.forEach(function (b) {
         var li = document.createElement("li");
-        li.textContent = b;
+        li.innerHTML = b;
         badges.appendChild(li);
       });
     }
@@ -91,24 +91,24 @@
         article.appendChild(icon);
 
         var h3 = document.createElement("h3");
-        h3.textContent = card.title;
+        h3.innerHTML = card.title;
         article.appendChild(h3);
 
         var sub = document.createElement("p");
         sub.className = "card-sub";
-        sub.textContent = card.sub;
+        sub.innerHTML = card.sub;
         article.appendChild(sub);
 
         card.paragraphs.forEach(function (p) {
           var pEl = document.createElement("p");
-          pEl.textContent = p;
+          pEl.innerHTML = p;
           article.appendChild(pEl);
         });
 
         if (card.highlight) {
           var hi = document.createElement("p");
           hi.className = "card-highlight";
-          hi.textContent = card.highlight;
+          hi.innerHTML = card.highlight;
           article.appendChild(hi);
         }
 
@@ -132,11 +132,11 @@
         li.appendChild(num);
 
         var h3 = document.createElement("h3");
-        h3.textContent = step.title;
+        h3.innerHTML = step.title;
         li.appendChild(h3);
 
         var p = document.createElement("p");
-        p.textContent = step.text;
+        p.innerHTML = step.text;
         li.appendChild(p);
 
         steps.appendChild(li);
@@ -154,11 +154,11 @@
         div.className = "feature";
 
         var h3 = document.createElement("h3");
-        h3.textContent = feature.title;
+        h3.innerHTML = feature.title;
         div.appendChild(h3);
 
         var p = document.createElement("p");
-        p.textContent = feature.text;
+        p.innerHTML = feature.text;
         div.appendChild(p);
 
         features.appendChild(div);
@@ -187,12 +187,12 @@
       C.nav.links.forEach(function (link) {
         var a = document.createElement("a");
         a.href = link.href;
-        a.textContent = link.label;
+        a.innerHTML = link.label;
         footerNav.appendChild(a);
       });
       var c = document.createElement("a");
       c.href = C.nav.contact.href;
-      c.textContent = C.nav.contact.label;
+      c.innerHTML = C.nav.contact.label;
       footerNav.appendChild(c);
     }
 

@@ -15,7 +15,7 @@
   .edit:focus { outline: none; box-shadow: 0 0 0 3px rgba(28,126,140,0.7); background: rgba(255,255,255,0.12); }
   .toast {
     position: fixed;
-    bottom: 22px; left: 50%;
+    bottom: 84px; left: 50%;
     transform: translateX(-50%);
     background: #0d2b45;
     color: #fff;
@@ -136,6 +136,58 @@
     border: 1px solid #e2e9ee;
   }
   .auth-card .ghost:hover { background: #e9f1f4; }
+  .fmtbar {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 130;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    max-width: 94vw;
+    padding: 7px 10px;
+    background: #fff;
+    border: 1px solid #e2e9ee;
+    border-radius: 16px;
+    box-shadow: 0 14px 38px rgba(13, 43, 69, 0.24);
+  }
+  .fmtbar.show { display: flex; }
+  .fmtbar button {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #0d2b45;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fmtbar button:hover { background: #eef4f6; }
+  .fmtbar .fmt-sep { width: 1px; height: 22px; background: #e2e9ee; margin: 0 4px; }
+  .fmtbar select {
+    border: 1px solid #e2e9ee;
+    border-radius: 8px;
+    padding: 6px 8px;
+    font: 0.85rem Inter, sans-serif;
+    color: #0d2b45;
+    background: #fff;
+    cursor: pointer;
+  }
+  .fmtbar input[type=color] {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #e2e9ee;
+    border-radius: 8px;
+    padding: 2px;
+    background: #fff;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -171,6 +223,21 @@
 <div class="floatbtns" id="floatbtns">
   <button type="button" class="publish" id="publishBtn">Opslaan &amp; publiceren</button>
   <button type="button" class="token-set" id="tokenBtn" title="GitHub-token instellen of wijzigen">Instellingen</button>
+</div>
+
+<div class="fmtbar" id="fmtBar">
+  <button type="button" data-cmd="bold" title="Vet"><b>B</b></button>
+  <button type="button" data-cmd="italic" title="Cursief"><i>I</i></button>
+  <button type="button" data-cmd="underline" title="Onderstreept"><u>U</u></button>
+  <button type="button" data-cmd="removeFormat" title="Opmaak wissen">&times;</button>
+  <span class="fmt-sep"></span>
+  <select id="fmtSize" title="Tekstgrootte">
+    <option value="">Grootte</option>
+    <option value="small">Klein</option>
+    <option value="large">Groot</option>
+    <option value="xlarge">Extra groot</option>
+  </select>
+  <input type="color" id="fmtColor" value="#0d2b45" title="Tekstkleur">
 </div>
 
 <div class="toast" id="toast"></div>
@@ -303,6 +370,7 @@
     try { localStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
     overlay.classList.add("hidden");
     document.getElementById("floatbtns").classList.add("show");
+    document.getElementById("fmtBar").classList.add("show");
     authPassword.value = "";
   }
 
@@ -337,7 +405,7 @@
 
   function setText(id, text) {
     var el = $(id);
-    if (el) el.textContent = text;
+    if (el) el.innerHTML = text;
   }
 
   var ICONS = {
@@ -359,13 +427,13 @@
     C.nav.links.forEach(function (link, i) {
       var a = document.createElement("a");
       a.href = link.href;
-      a.textContent = link.label;
+      a.innerHTML = link.label;
       setEditable(a, "nav.links." + i + ".label");
       nav.appendChild(a);
     });
     var cta = document.createElement("a");
     cta.href = C.nav.contact.href;
-    cta.textContent = C.nav.contact.label;
+    cta.innerHTML = C.nav.contact.label;
     cta.className = "nav-cta";
     setEditable(cta, "nav.contact.label");
     nav.appendChild(cta);
@@ -383,7 +451,7 @@
       var a = document.createElement("a");
       a.className = pair[0] === "heroCtaPrimary" ? "btn btn-primary" : "btn btn-ghost";
       a.href = pair[1].href;
-      a.textContent = pair[1].label;
+      a.innerHTML = pair[1].label;
       setEditable(a, pair[0] === "heroCtaPrimary" ? "hero.ctaPrimary.label" : "hero.ctaSecondary.label");
       heroActions.appendChild(a);
     });
@@ -393,7 +461,7 @@
     badges.innerHTML = "";
     C.hero.badges.forEach(function (b, i) {
       var li = document.createElement("li");
-      li.textContent = b;
+      li.innerHTML = b;
       setEditable(li, "hero.badges." + i);
       badges.appendChild(li);
     });
@@ -430,19 +498,19 @@
       article.appendChild(icon);
 
       var h3 = document.createElement("h3");
-      h3.textContent = card.title;
+      h3.innerHTML = card.title;
       setEditable(h3, base + ".title");
       article.appendChild(h3);
 
       var sub = document.createElement("p");
       sub.className = "card-sub";
-      sub.textContent = card.sub;
+      sub.innerHTML = card.sub;
       setEditable(sub, base + ".sub");
       article.appendChild(sub);
 
       card.paragraphs.forEach(function (p, j) {
         var pEl = document.createElement("p");
-        pEl.textContent = p;
+        pEl.innerHTML = p;
         setEditable(pEl, base + ".paragraphs." + j);
         article.appendChild(pEl);
       });
@@ -450,7 +518,7 @@
       if (card.highlight) {
         var hi = document.createElement("p");
         hi.className = "card-highlight";
-        hi.textContent = card.highlight;
+        hi.innerHTML = card.highlight;
         setEditable(hi, base + ".highlight");
         article.appendChild(hi);
       }
@@ -474,12 +542,12 @@
       li.appendChild(num);
 
       var h3 = document.createElement("h3");
-      h3.textContent = step.title;
+      h3.innerHTML = step.title;
       setEditable(h3, "werkwijze.steps." + i + ".title");
       li.appendChild(h3);
 
       var p = document.createElement("p");
-      p.textContent = step.text;
+      p.innerHTML = step.text;
       setEditable(p, "werkwijze.steps." + i + ".text");
       li.appendChild(p);
 
@@ -497,12 +565,12 @@
       div.className = "feature";
 
       var h3 = document.createElement("h3");
-      h3.textContent = feature.title;
+      h3.innerHTML = feature.title;
       setEditable(h3, "waarom.features." + i + ".title");
       div.appendChild(h3);
 
       var p = document.createElement("p");
-      p.textContent = feature.text;
+      p.innerHTML = feature.text;
       setEditable(p, "waarom.features." + i + ".text");
       div.appendChild(p);
 
@@ -528,7 +596,7 @@
     var emailBtn = document.createElement("a");
     emailBtn.className = "btn btn-primary";
     emailBtn.href = "mailto:" + C.contact.email;
-    emailBtn.textContent = C.contact.emailLabel;
+    emailBtn.innerHTML = C.contact.emailLabel;
     setEditable(emailBtn, "contact.emailLabel");
     ctaActions.appendChild(emailBtn);
     ctaActions.addEventListener("click", function (e) { e.preventDefault(); });
@@ -543,13 +611,13 @@
     C.nav.links.forEach(function (link, i) {
       var a = document.createElement("a");
       a.href = link.href;
-      a.textContent = link.label;
+      a.innerHTML = link.label;
       setEditable(a, "nav.links." + i + ".label");
       footerNav.appendChild(a);
     });
     var c = document.createElement("a");
     c.href = C.nav.contact.href;
-    c.textContent = C.nav.contact.label;
+    c.innerHTML = C.nav.contact.label;
     setEditable(c, "nav.contact.label");
     footerNav.appendChild(c);
   }
@@ -560,8 +628,10 @@
     a.addEventListener("click", function (e) { e.preventDefault(); });
   });
 
-  function cleanText(s) {
-    return s.replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  function cleanHtml(html) {
+    var s = (html || "").replace(/&nbsp;/g, " ");
+    s = s.replace(/^(?:\s|<br\s*\/?>)+/i, "").replace(/(?:\s|<br\s*\/?>)+$/i, "");
+    return s.trim();
   }
 
   function applyTexts(target) {
@@ -572,7 +642,7 @@
         if (typeof cur[parts[i]] === "undefined") cur[parts[i]] = {};
         cur = cur[parts[i]];
       }
-      cur[parts[parts.length - 1]] = cleanText(el.textContent);
+      cur[parts[parts.length - 1]] = cleanHtml(el.innerHTML);
     });
     return target;
   }
@@ -736,6 +806,77 @@
     showToast("Token opgeslagen op dit apparaat. Klik opnieuw op Opslaan &amp; publiceren.");
   });
   $("#tokenCancelBtn").addEventListener("click", hideTokenModal);
+
+  function normalizeFonts() {
+    document.querySelectorAll("font").forEach(function (f) {
+      if (!f.hasChildNodes()) { f.parentNode.removeChild(f); return; }
+      var span = document.createElement("span");
+      var color = f.getAttribute("color");
+      var size = f.getAttribute("size");
+      if (color) span.style.color = color;
+      if (size) {
+        var map = { "1": "0.75em", "2": "0.85em", "3": "1em", "4": "1.25em", "5": "1.5em", "6": "2em", "7": "2.4em" };
+        span.style.fontSize = map[String(size)] || "1em";
+      }
+      while (f.firstChild) span.appendChild(f.firstChild);
+      f.parentNode.replaceChild(span, f);
+    });
+  }
+
+  var savedRange = null;
+  document.addEventListener("selectionchange", function () {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    var node = sel.anchorNode;
+    while (node) {
+      if (node.nodeType === 1 && node.isContentEditable) {
+        savedRange = sel.getRangeAt(0).cloneRange();
+        return;
+      }
+      node = node.parentNode;
+    }
+  });
+
+  function restoreSelection() {
+    if (!savedRange) return false;
+    var node = savedRange.startContainer;
+    var el = node.nodeType === 1 ? node : node.parentNode;
+    while (el && !el.isContentEditable) el = el.parentNode;
+    if (el) el.focus();
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+    return true;
+  }
+
+  var fmtBar = $("fmtBar");
+  if (fmtBar) {
+    fmtBar.querySelectorAll("button[data-cmd]").forEach(function (btn) {
+      btn.addEventListener("mousedown", function (e) { e.preventDefault(); });
+      btn.addEventListener("click", function () {
+        document.execCommand(btn.dataset.cmd, false, null);
+        normalizeFonts();
+      });
+    });
+
+    var fmtSize = $("fmtSize");
+    fmtSize.addEventListener("change", function () {
+      var map = { small: "2", large: "5", xlarge: "6" };
+      if (map[fmtSize.value] && restoreSelection()) {
+        document.execCommand("fontSize", false, map[fmtSize.value]);
+        normalizeFonts();
+      }
+      fmtSize.value = "";
+    });
+
+    var fmtColor = $("fmtColor");
+    fmtColor.addEventListener("input", function () {
+      if (restoreSelection()) {
+        document.execCommand("foreColor", false, fmtColor.value);
+        normalizeFonts();
+      }
+    });
+  }
 
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === "s") {
