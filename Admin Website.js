@@ -128,7 +128,7 @@ var WAYPOINT_CONTENT = {
     "features": [
       {
         "title": "Klinische ervaring",
-        "text": "Tandheelkundige vraagstukken worden beoordeeld vanuit ruime kennis en ervaring in de dagelijkse tandheelkundige praktijk en de klinische besluitvorming die daarbij hoort."
+        "text": "Tandheelkundige vraagstukken worden beoordeeld vanuit d<span style=\"font-size:12.0pt;line-height:115%;\nfont-family:&quot;Aptos&quot;,sans-serif;mso-ascii-theme-font:minor-latin;mso-fareast-font-family:\nAptos;mso-fareast-theme-font:minor-latin;mso-hansi-theme-font:minor-latin;\nmso-bidi-font-family:&quot;Times New Roman&quot;;mso-bidi-theme-font:minor-bidi;\nmso-ansi-language:NL;mso-fareast-language:EN-US;mso-bidi-language:AR-SA\">e\ncombinatie van ruime klinische ervaring, ondernemerschap en een brede kijk op\nde kwaliteit en organisatie van tandheelkundige zorg </span>in de dagelijkse tandheelkundige praktijk en de klinische besluitvorming die daarbij hoort."
       },
       {
         "title": "Onafhankelijk oordeel",
@@ -148,7 +148,7 @@ var WAYPOINT_CONTENT = {
     "eyebrow": "Over Waypoint Dental Expertise",
     "title": "Kennis, zorgvuldigheid en een onafhankelijk oordeel",
     "paragraph1": "Waypoint Dental Expertise is opgericht vanuit de overtuiging dat goede tandheelkundige besluitvorming begint met kennis, zorgvuldigheid en een onafhankelijk oordeel.",
-    "paragraph2": "Met een ruime achtergrond in de algemene en restauratieve tandheelkunde bieden wij advies op het snijvlak van tandheelkundige zorg, juridische vraagstukken en letselschade.",
+    "paragraph2": "Met een ruime achtergrond in de algemene en restauratieve tandheelkunde bieden wij advies op het snijvlak van tandheelkundige zorg, juridische vraagstukken en letselschade.<div><p class=\"isselectedend\">De combinatie van ruime klinische ervaring,\nondernemerschap en een brede kijk op de kwaliteit en organisatie van\ntandheelkundige zorg vormt de basis van Waypoint Dental\nExpertise: een onafhankelijk advies- en expertisebureau voor tandheelkundige\nvraagstukken.</p></div>",
     "imageCaption": "<span style=\"font-size: 16pt;\">M.Sc. D.J. Langeveld - adviserend tandarts</span>"
   },
   "contact": {
